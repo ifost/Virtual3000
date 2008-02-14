@@ -1,9 +1,11 @@
+with Ada.Strings.Bounded;
 package Nvram is
-   Console_Path : String := "120.1";
-   Primary_boot : String(1..100) ; --  := "120.1";
-   HA_Alt_Boot  : String(1..100) ; -- := "120.1";
-   Alternate_boot : String(1..100) ; --  := "120.1";
-   Autoboot : Boolean;
-   --   procedure Put (item : in Path);
-   procedure Set_Primary (New_Path : in String);
+   package Path is new Ada.Strings.Bounded.Generic_Bounded_Length(255);
+   function Get_Console_Path return Path.Bounded_String;
+   function Get_Primary_boot return Path.Bounded_String;
+   function Get_HA_Alternate_Boot  return Path.Bounded_String;
+   function Get_Alternate_boot return Path.Bounded_String;
+   function Get_Autoboot return Boolean;
+   --   procedure Put (item : in Path.Bounded_String);
+   -- procedure Set_Primary (New_Path : in String);
 end;

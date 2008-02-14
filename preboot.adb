@@ -3,6 +3,18 @@ use Ada.Text_IO;
 with Ada.Strings.Unbounded.Text_IO;
 use Ada.Strings.Unbounded.Text_IO;
 with Ada.Strings.Unbounded;
+use Ada.Strings.Unbounded;
+with Ada.Strings.Maps;
+use Ada.Strings.Maps;
+with Ada.Strings.Maps.Constants;
+use Ada.Strings.Maps.Constants;
+
+with Ada.Strings;
+use Ada.Strings; -- to get Outside
+
+with Ada.Characters.Handling;
+use Ada.Characters.Handling;
+
 with Nvram;
 
 procedure Preboot is
@@ -16,7 +28,7 @@ procedure Preboot is
      New_Line;
      Put("Console path        = ");
      --Put("120.1");
-     Put(Nvram.Console_Path);
+     Put(Nvram.Path.To_String(Nvram.Get_Console_Path));
      New_Line;
      Put_Line("Primary boot path   = 0.1.1.0");
      Put_Line("HA Alternate path   = 0.1.2.0");
@@ -38,6 +50,9 @@ procedure Preboot is
 
    procedure BCH_Menu is
     Command_choice  : Unbounded_String;
+    From : Integer;
+     To : Integer;
+    First_word : Unbounded_string;
    begin
       New_Line;
       Put_Line("----------------------- Main Menu --------------------------");
@@ -54,10 +69,15 @@ procedure Preboot is
       Put_Line("---------");
       Put("Main Menu: Enter command or menu > ");
       Command_Choice := Ada.Strings.Unbounded.Text_IO.Get_line;
-
-      Put_Line("Yu said");
-      Put(Command_Choice);
-      New_Line;
+      Find_Token(Command_Choice, To_set(' '), Outside, From, To);
+      if To > From then
+          Put("You said ");
+          First_word := To_Unbounded_string(To_Upper(To_String(Command_Choice)(From..To)));
+           put(to_string(First_word));
+      else
+             Put("You didn't say much");
+      end if;
+     New_line;
    end  BCH_Menu;
 
 begin
